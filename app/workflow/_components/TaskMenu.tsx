@@ -26,6 +26,14 @@ function TaskMenu() {
             <TaskMenuBtn taskType={TaskType.PAGE_TO_HTML} />
           </AccordionContent>
         </AccordionItem>
+        <AccordionItem value="textExtraction">
+          <AccordionTrigger className="font-bold">
+            Extract Text From Element
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-1">
+            <TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
     </aside>
   );

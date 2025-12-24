@@ -1,9 +1,12 @@
 "use client";
 import { Workflow } from "@/lib/generated/prisma/client";
 import {
+  addEdge,
   Background,
   BackgroundVariant,
+  Connection,
   Controls,
+  Edge,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -14,9 +17,14 @@ import "@xyflow/react/dist/style.css";
 import { CreateFLowNode } from "@/lib/workflow/createFlowNode";
 import { TaskType } from "@/types/task";
 import NodeComponent from "./nodes/NodeComponent";
+import DeletableEdge from "./edges/DeletableEdge";
 
 const nodeTypes = {
   Node: NodeComponent,
+};
+
+const edgeTypes = {
+  default: DeletableEdge,
 };
 
 const snapGrid: [number, number] = [50, 50];
@@ -26,7 +34,8 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
   const [nodes, setNodes, onNodesChange] = useNodesState([
     CreateFLowNode(TaskType.LAUNCH_BROWSER),
   ]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const { updateNodeData } = useReactFlow();
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const onDragOver: DragEventHandler<HTMLDivElement> = useCallback((event) => {
     event.preventDefault();
     if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
@@ -45,6 +54,21 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
     },
     [screenToFlowPosition, setNodes]
   );
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      setEdges((eds) => addEdge({ ...connection, animated: true }, eds));
+      if (!connection.targetHandle) return;
+      const node = nodes.find((n) => n.id === connection.target);
+      if (!node) return;
+      const nodeInputs = node.data?.inputs;
+      delete nodeInputs?.[connection.targetHandle];
+      updateNodeData(connection.target, {
+        inputs: nodeInputs,
+      });
+    },
+    [nodes, setEdges, updateNodeData]
+  );
+  console.log("@NODES", nodes);
   useEffect(() => {
     const flow = JSON.parse(workflow.definition);
     if (!flow) return;
@@ -62,12 +86,14 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
         edges={edges}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         snapToGrid
         snapGrid={snapGrid}
         fitView
         fitViewOptions={fitViewOptions}
         onDragOver={onDragOver}
         onDrop={onDrop}
+        onConnect={onConnect}
       >
         <Controls position="top-left" fitViewOptions={fitViewOptions} />
         <Background variant={BackgroundVariant.Dots} />

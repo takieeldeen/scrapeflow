@@ -1,7 +1,6 @@
 import { GetWorkflowsForUser } from "@/actions/workflows/getWorkflowsForUser";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { waitFor } from "@/lib/helper/wait-for";
 import { AlertCircle, InboxIcon } from "lucide-react";
 import React, { Suspense } from "react";
 import CreateWorkflowDialog from "./_components/CreateWorkflowDialog";
@@ -40,6 +39,7 @@ function UserWorkflowsSkeleton() {
 
 async function UserWorkflows() {
   const workflows = await GetWorkflowsForUser();
+  console.log(workflows, "workflows fetched");
   if (!workflows)
     return (
       <Alert variant="destructive">

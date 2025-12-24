@@ -1,29 +1,33 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { ParamProps } from "@/types/appNode";
-import { useId, useState } from "react";
+import { useId } from "react";
 
-function StringParam({ param, value, updateNodeParamValue }: ParamProps) {
-  const [val, setVal] = useState<string>(value);
-
+function StringParam({
+  param,
+  value,
+  updateNodeParamValue,
+  connected,
+}: ParamProps) {
   const id = useId();
+  let Component: typeof Input | typeof Textarea = Input;
+  if (param.variant === "textarea") Component = Textarea;
   return (
     <div className="space-y-1 p-1 w-full">
       <Label htmlFor={id} className="text-xs flex">
         {param.name}
         {param.required && <p className="text-red-400">*</p>}
       </Label>
-      <Input
+      <Component
         id={id}
-        value={val}
+        value={value ?? ""}
         onChange={(e) => {
-          setVal(e.target.value);
+          updateNodeParamValue(e.target.value);
         }}
         className="text-xs"
-        onBlur={() => {
-          updateNodeParamValue(val);
-        }}
+        disabled={connected}
       />
       {param.helperText && (
         <p className="text-muted-foreground px-2">{param.helperText}</p>

@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useReactFlow } from "@xyflow/react";
 import React, { ReactNode } from "react";
