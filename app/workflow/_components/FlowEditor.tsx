@@ -18,6 +18,8 @@ import { CreateFLowNode } from "@/lib/workflow/createFlowNode";
 import { TaskType } from "@/types/task";
 import NodeComponent from "./nodes/NodeComponent";
 import DeletableEdge from "./edges/DeletableEdge";
+import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { AppNode } from "@/types/appNode";
 
 const nodeTypes = {
   Node: NodeComponent,
@@ -58,6 +60,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
     (connection: Connection) => {
       setEdges((eds) => addEdge({ ...connection, animated: true }, eds));
       if (!connection.targetHandle) return;
+
       const node = nodes.find((n) => n.id === connection.target);
       if (!node) return;
       const nodeInputs = node.data?.inputs;
@@ -68,7 +71,35 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
     },
     [nodes, setEdges, updateNodeData]
   );
-  console.log("@NODES", nodes);
+  const checkConnectionValidation = useCallback(
+    (connection: Connection | Edge) => {
+      // No Self Connection Allowed
+      if (connection.source === connection.target) return false;
+      // No Connection before different types
+      const sourceNode = nodes.find((n) => n.id === connection.source);
+      const targetNode = nodes.find((n) => n.id === connection.target);
+      if (!sourceNode || !targetNode) return false;
+      const sourceTask = TaskRegistry[sourceNode.data.type];
+      const targetTask = TaskRegistry[targetNode.data.type];
+      const output = sourceTask?.outputs?.find(
+        (o) => o.name === connection.sourceHandle
+      );
+      const input = targetTask?.inputs?.find(
+        (o) => o.name === connection.targetHandle
+      );
+      if (!output || !input) return false;
+      if (output.type !== input.type) return false;
+      // Prevent Cycles in the graph
+      const hasCycle = (
+        node: AppNode,
+        visited = new Set<string>()
+      ): boolean => {
+        if (visited.has(node.id)) return false;
+      };
+      return true;
+    },
+    [nodes]
+  );
   useEffect(() => {
     const flow = JSON.parse(workflow.definition);
     if (!flow) return;
@@ -94,6 +125,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
         onDragOver={onDragOver}
         onDrop={onDrop}
         onConnect={onConnect}
+        isValidConnection={checkConnectionValidation}
       >
         <Controls position="top-left" fitViewOptions={fitViewOptions} />
         <Background variant={BackgroundVariant.Dots} />

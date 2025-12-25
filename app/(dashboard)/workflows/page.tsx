@@ -39,7 +39,6 @@ function UserWorkflowsSkeleton() {
 
 async function UserWorkflows() {
   const workflows = await GetWorkflowsForUser();
-  console.log(workflows, "workflows fetched");
   if (!workflows)
     return (
       <Alert variant="destructive">

@@ -10,12 +10,12 @@ function NodeInput({ input, nodeId }: { input: TaskParam; nodeId: string }) {
   const connected = edges.some(
     (edg) => edg.target === nodeId && edg.targetHandle === input.name
   );
-  console.log(edges, "EDGES", nodeId);
   return (
     <div className="flex justify-start relative p-3 bg-secondary w-full">
       <NodeParamField param={input} nodeId={nodeId} connected={connected} />
       {!input.hideHandle && (
         <Handle
+          isConnectable={!connected}
           id={input.name}
           type="target"
           position={Position.Left}
