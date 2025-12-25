@@ -5,6 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import SaveBtn from "./SaveBtn";
+import ExecuteBtn from "./ExecuteBtn";
 
 function Topbar({
   title,
@@ -41,6 +42,7 @@ function Topbar({
       </div>
       <div className="flex gap-1 flex-1 justify-end">
         <SaveBtn workflowId={workflowId} />
+        <ExecuteBtn workflowId={workflowId} />
       </div>
     </header>
   );

@@ -7,6 +7,7 @@ import {
   Connection,
   Controls,
   Edge,
+  getOutgoers,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -20,6 +21,7 @@ import NodeComponent from "./nodes/NodeComponent";
 import DeletableEdge from "./edges/DeletableEdge";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { AppNode } from "@/types/appNode";
+import { useExecutionPlan } from "@/components/hooks/useExecutionPlan";
 
 const nodeTypes = {
   Node: NodeComponent,
@@ -32,6 +34,7 @@ const edgeTypes = {
 const snapGrid: [number, number] = [50, 50];
 const fitViewOptions = { padding: 1 };
 function FlowEditor({ workflow }: { workflow: Workflow }) {
+  const { generateExecutionPlan } = useExecutionPlan();
   const { setViewport, screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState([
     CreateFLowNode(TaskType.LAUNCH_BROWSER),
@@ -89,16 +92,21 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
       );
       if (!output || !input) return false;
       if (output.type !== input.type) return false;
+
       // Prevent Cycles in the graph
-      const hasCycle = (
-        node: AppNode,
-        visited = new Set<string>()
-      ): boolean => {
+      const hasCycle = (node: AppNode, visited = new Set<string>()) => {
         if (visited.has(node.id)) return false;
+        visited.add(node.id);
+        for (const outgoer of getOutgoers(node, nodes, edges)) {
+          if (outgoer.id === connection.source) return true;
+          if (hasCycle(outgoer, visited)) return true;
+        }
       };
-      return true;
+      const detectedCycle = hasCycle(targetNode);
+
+      return !detectedCycle;
     },
-    [nodes]
+    [edges, nodes]
   );
   useEffect(() => {
     const flow = JSON.parse(workflow.definition);
