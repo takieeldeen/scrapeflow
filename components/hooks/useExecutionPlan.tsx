@@ -1,22 +1,45 @@
-import { FlowToExecutionPlan } from "@/lib/workflow/executionPlan";
-import { TaskRegistry } from "@/lib/workflow/task/registry";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  FlowToExecutionPlan,
+  FlowToExecutionPlanValidationError,
+} from "@/lib/workflow/executionPlan";
 import { AppNode } from "@/types/appNode";
-import { TaskType } from "@/types/task";
-import { Node, useReactFlow } from "@xyflow/react";
+import { useReactFlow } from "@xyflow/react";
 import { useCallback } from "react";
+import useFlowValidation from "./useFlowValidation";
+import { toast } from "sonner";
 
 export const useExecutionPlan = () => {
   const { toObject } = useReactFlow();
+  const { setInvalidInputs, clearErrors } = useFlowValidation();
+  const handleError = useCallback(
+    (error: any) => {
+      switch (error.type) {
+        case FlowToExecutionPlanValidationError.NO_ENTRY_POINT:
+          toast.error("No entry point found");
+          break;
+        case FlowToExecutionPlanValidationError.INVALID_INPUTS:
+          toast.error("Not all inputs values are set");
+          setInvalidInputs(error.invalidElements);
+          break;
+        default:
+          toast.error("Something Went Wrong");
+      }
+    },
+    [setInvalidInputs]
+  );
   const generateExecutionPlan = useCallback(() => {
     const { nodes, edges } = toObject();
-    const result = FlowToExecutionPlan(nodes as AppNode[], edges);
-    const executionPlan: (Node | AppNode)[] = [];
-    nodes.forEach((node, i) => {
-      const taskType = node.data.type as TaskType;
-      const taskDefinition = TaskRegistry[taskType];
-      if (taskDefinition.isEntryPoint) executionPlan.push(node);
-    });
+    const { executionPlan, error } = FlowToExecutionPlan(
+      nodes as AppNode[],
+      edges
+    );
+    if (error) {
+      handleError(error);
+      return null;
+    }
+    clearErrors();
     return executionPlan;
-  }, [toObject]);
+  }, [clearErrors, handleError, toObject]);
   return { generateExecutionPlan };
 };
