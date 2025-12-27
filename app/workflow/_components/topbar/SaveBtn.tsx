@@ -1,3 +1,4 @@
+"use client";
 import { UpdateWorkflow } from "@/actions/workflows/updateWorkflow";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";

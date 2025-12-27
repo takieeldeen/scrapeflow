@@ -1,6 +1,8 @@
 import { TaskParamType, TaskType } from "@/types/task";
+import { WorkflowTask } from "@/types/workflows";
 import { GlobeIcon, LucideProps } from "lucide-react";
 
+// This is the most resource intensive process
 export const LaunchBrowserTask = {
   type: TaskType.LAUNCH_BROWSER,
   label: "Launch Browser",
@@ -23,4 +25,5 @@ export const LaunchBrowserTask = {
       type: TaskParamType.BROWSER_INSTANCE,
     },
   ],
-};
+  credits: 5,
+} satisfies WorkflowTask;

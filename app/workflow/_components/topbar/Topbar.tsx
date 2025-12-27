@@ -5,15 +5,18 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import SaveBtn from "./SaveBtn";
+import ExecuteBtn from "./ExecuteBtn";
 
 function Topbar({
   title,
   subtitle,
   workflowId,
+  hideActions = false,
 }: {
   title: string;
   subtitle?: string;
   workflowId: string;
+  hideActions?: boolean;
 }) {
   const router = useRouter();
   return (
@@ -40,7 +43,12 @@ function Topbar({
         </div>
       </div>
       <div className="flex gap-1 flex-1 justify-end">
-        <SaveBtn workflowId={workflowId} />
+        {!hideActions && (
+          <>
+            <SaveBtn workflowId={workflowId} />
+            <ExecuteBtn workflowId={workflowId} />
+          </>
+        )}
       </div>
     </header>
   );

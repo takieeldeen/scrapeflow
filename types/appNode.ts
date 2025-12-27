@@ -18,3 +18,8 @@ export interface ParamProps {
   connected?: boolean;
   updateNodeParamValue: (newVal: string) => void;
 }
+
+export interface AppNodeMissingInputs {
+  nodeId: string;
+  inputs: string[];
+}

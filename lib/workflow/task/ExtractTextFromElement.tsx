@@ -1,4 +1,5 @@
 import { TaskParamType, TaskType } from "@/types/task";
+import { WorkflowTask } from "@/types/workflows";
 import { CaseSensitive, LucideProps } from "lucide-react";
 
 export const ExtractTextFromElement = {
@@ -7,7 +8,7 @@ export const ExtractTextFromElement = {
   icon: (props: LucideProps) => (
     <CaseSensitive className="stroke-rose-800" {...props} />
   ),
-  isEntryPoint: true,
+  isEntryPoint: false,
   inputs: [
     {
       name: "Html",
@@ -29,4 +30,5 @@ export const ExtractTextFromElement = {
       type: TaskParamType.STRING,
     },
   ],
-};
+  credits: 2,
+} satisfies WorkflowTask;

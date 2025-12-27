@@ -7,6 +7,7 @@ import {
   Connection,
   Controls,
   Edge,
+  getOutgoers,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -89,16 +90,21 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
       );
       if (!output || !input) return false;
       if (output.type !== input.type) return false;
+
       // Prevent Cycles in the graph
-      const hasCycle = (
-        node: AppNode,
-        visited = new Set<string>()
-      ): boolean => {
+      const hasCycle = (node: AppNode, visited = new Set<string>()) => {
         if (visited.has(node.id)) return false;
+        visited.add(node.id);
+        for (const outgoer of getOutgoers(node, nodes, edges)) {
+          if (outgoer.id === connection.source) return true;
+          if (hasCycle(outgoer, visited)) return true;
+        }
       };
-      return true;
+      const detectedCycle = hasCycle(targetNode);
+
+      return !detectedCycle;
     },
-    [nodes]
+    [edges, nodes]
   );
   useEffect(() => {
     const flow = JSON.parse(workflow.definition);
