@@ -17,24 +17,35 @@ import {
   LucideIcon,
   WorkflowIcon,
 } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 // type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 type ExecutionData = any;
 function ExecutionViewer({
   initialData,
-  refetchFn,
+  fetchExecutionDetails,
+  fetchPhaseDetails,
 }: {
   initialData: ExecutionData;
-  refetchFn: any;
+  fetchExecutionDetails: any;
+  fetchPhaseDetails: any;
 }) {
+  const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
   const query = useQuery({
     queryKey: ["execution", initialData?.id],
     initialData,
-    queryFn: () => refetchFn(initialData!.id),
+    queryFn: () => fetchExecutionDetails(initialData!.id),
     refetchInterval: (q) =>
       q.state.data?.status === ExecutionStatus.RUNNING ? 1000 : false,
   });
+
+  const phaseDetails = useQuery({
+    queryKey: ["phaseDetails", selectedPhase],
+    enabled: !!selectedPhase,
+    queryFn: () => fetchPhaseDetails(selectedPhase!),
+  });
+  const isRunning = query?.data?.status === ExecutionStatus.RUNNING;
+
   const duration = DatesToDurationString(
     query?.data?.completedAt,
     query?.data?.startedAt
@@ -90,19 +101,27 @@ function ExecutionViewer({
           <div className="oveflow-auto h-full px-2 py-4">
             {query.data?.phases?.map((phase: any, index: number) => (
               <Button
+                onClick={() => {
+                  if (isRunning) return;
+                  setSelectedPhase(phase.id);
+                }}
                 key={index}
                 className="w-full justify-between my-1"
-                variant={"ghost"}
+                variant={selectedPhase === phase.id ? "default" : "ghost"}
               >
                 <div className="flex items-center gap-2">
                   <Badge variant={"outline"}>{index + 1}</Badge>
                   <p className="font-semibold">{phase.name}</p>
                 </div>
+                <p className="text-xs text-muted-foreground">{phase.status}</p>
               </Button>
             ))}
           </div>
         </div>
       </aside>
+      <div className="flex w-full h-full">
+        <pre>{JSON.stringify(phaseDetails?.data || {}, null, 4)}</pre>
+      </div>
     </div>
   );
 }

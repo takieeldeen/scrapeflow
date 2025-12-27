@@ -46,7 +46,8 @@ async function ExecutionViewerWrapper({
   return (
     <ExecutionViewer
       initialData={workflowExecution}
-      refetchFn={GetWorkflowExecutionWithPhases}
+      fetchExecutionDetails={GetWorkflowExecutionWithPhases}
+      fetchPhaseDetails={GetWorkflowExecutionWithPhases}
     />
   );
 }
