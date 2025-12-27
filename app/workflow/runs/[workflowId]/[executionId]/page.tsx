@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { Loader2Icon } from "lucide-react";
 import React, { Suspense } from "react";
 import ExecutionViewer from "./_components/ExecutionViewer";
+import { GetWorkflowPhaseDetails } from "@/actions/workflows/getWorkflowPhaseDetails";
 
 async function WorkflowExecutionPage({
   params,
@@ -47,7 +48,7 @@ async function ExecutionViewerWrapper({
     <ExecutionViewer
       initialData={workflowExecution}
       fetchExecutionDetails={GetWorkflowExecutionWithPhases}
-      fetchPhaseDetails={GetWorkflowExecutionWithPhases}
+      fetchPhaseDetails={GetWorkflowPhaseDetails}
     />
   );
 }

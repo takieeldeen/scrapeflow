@@ -50,7 +50,7 @@ function ExecutionViewer({
     query?.data?.completedAt,
     query?.data?.startedAt
   );
-
+  console.log(phaseDetails?.data, "PHASE_DETAILS");
   const creditsConsumed = GetPhasesTotalConst(query?.data?.phases || []);
   return (
     <div className="flex w-full h-full">

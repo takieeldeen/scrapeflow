@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 export async function GetWorkflowPhaseDetails(phaseId: string) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthenticated");
-  return await prisma.executionPhase.findUnique({
+  const executionPhase = await prisma.executionPhase.findUnique({
     where: {
       id: phaseId,
       execution: {
@@ -13,4 +13,5 @@ export async function GetWorkflowPhaseDetails(phaseId: string) {
       },
     },
   });
+  return executionPhase;
 }
