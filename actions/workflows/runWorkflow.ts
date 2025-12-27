@@ -9,6 +9,10 @@ import {
   ExecutionStatus,
 } from "@/types/workflows";
 import { auth } from "@clerk/nextjs/server";
+<<<<<<< HEAD
+=======
+import { redirect } from "next/navigation";
+>>>>>>> 158dafbbf439335d3816bfbf6060297473f9dc66
 
 export async function RunWorkflow({
   workflowId,
@@ -19,6 +23,10 @@ export async function RunWorkflow({
 }) {
   const { userId } = await auth();
   if (!userId) throw new Error("unauthenticated");
+<<<<<<< HEAD
+=======
+  console.log({ userId, id: workflowId });
+>>>>>>> 158dafbbf439335d3816bfbf6060297473f9dc66
   const workflow = await prisma.workflow.findUnique({
     where: { userId, id: workflowId },
   });
@@ -56,8 +64,12 @@ export async function RunWorkflow({
     },
   });
   if (!execution) throw new Error("Workflow Execution Not Created");
+<<<<<<< HEAD
   return {
     executionId: execution.id,
   };
   // redirect(`/workflow/runs/${workflowId}/${execution.id}`);
+=======
+  redirect(`/workflows/${workflowId}/${execution.id}`);
+>>>>>>> 158dafbbf439335d3816bfbf6060297473f9dc66
 }

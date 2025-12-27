@@ -21,6 +21,7 @@ import NodeComponent from "./nodes/NodeComponent";
 import DeletableEdge from "./edges/DeletableEdge";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { AppNode } from "@/types/appNode";
+import { useExecutionPlan } from "@/components/hooks/useExecutionPlan";
 
 const nodeTypes = {
   Node: NodeComponent,
@@ -33,6 +34,7 @@ const edgeTypes = {
 const snapGrid: [number, number] = [50, 50];
 const fitViewOptions = { padding: 1 };
 function FlowEditor({ workflow }: { workflow: Workflow }) {
+  const { generateExecutionPlan } = useExecutionPlan();
   const { setViewport, screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState([
     CreateFLowNode(TaskType.LAUNCH_BROWSER),
