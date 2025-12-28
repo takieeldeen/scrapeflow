@@ -23,12 +23,12 @@ export const ExtractTextFromElement = {
       hideHandle: true,
       helperText: "CSS selector of the element to extract text from",
     },
-  ],
+  ] as const,
   outputs: [
     {
       name: "Extracted Text",
       type: TaskParamType.STRING,
     },
-  ],
+  ] as const,
   credits: 2,
 } satisfies WorkflowTask;
