@@ -1,0 +1,90 @@
+"use client";
+import { GetWorkflowExecutions } from "@/actions/workflows/getWorkflowExecutions";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { DatesToDurationString } from "@/lib/helper/dates";
+import { ExecutionStatus } from "@/types/workflows";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import ExecutionStatusIndicator from "./ExecutionStatusIndicator";
+
+type InitialDataType = Awaited<ReturnType<typeof GetWorkflowExecutions>>;
+
+function ExecutionsTable({
+  workflowId,
+  initialData,
+}: {
+  workflowId: string;
+  initialData: InitialDataType;
+}) {
+  const query = useQuery({
+    queryKey: ["executions", workflowId],
+    queryFn: () => GetWorkflowExecutions(workflowId),
+    initialData,
+    refetchInterval: 5000,
+  });
+  console.log(query.data);
+  return (
+    <div className="border rounded-lg shadow-md overflow-auto">
+      <Table className="h-full">
+        <TableHeader className="bg-muted">
+          <TableRow>
+            <TableHead>Id</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Consumed</TableHead>
+            <TableHead className="text-right text-xs text-muted-foreground">
+              Started at (desc)
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="gap-2 h-full overflow-auto">
+          {query?.data?.map((execution) => {
+            const duration = DatesToDurationString(
+              execution.completedAt,
+              execution.startedAt
+            );
+            return (
+              <TableRow key={execution?.id}>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span className="font-semibold">{execution.id}</span>
+                    <div className="text-muted-foreground text-xs">
+                      <span>Triggered Via</span>
+                      <Badge variant={"outline"}>{execution.trigger}</Badge>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <div className="flex gap-2 items-center">
+                      <ExecutionStatusIndicator
+                        status={execution.status as ExecutionStatus}
+                      />
+                      <span className="font-semibold capitalize">
+                        {execution.status}
+                      </span>
+                    </div>
+                    <div className="text-muted-foreground text-xs mx-5">
+                      {duration}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>{execution.creditsConsumed}</TableCell>
+                <TableCell>{execution.startedAt?.toISOString()}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
+
+export default ExecutionsTable;

@@ -5,23 +5,40 @@ import { AlertCircle, InboxIcon } from "lucide-react";
 import React, { Suspense } from "react";
 import CreateWorkflowDialog from "./_components/CreateWorkflowDialog";
 import WorkflowCard from "./_components/WorkflowCard";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { GetAvailableCredits } from "@/actions/billing/getAvailableCredits";
 
-function WorkflowsPage() {
+async function WorkflowsPage() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["user-available-credits"],
+    queryFn: GetAvailableCredits,
+  });
+
+  const dehydrateState = dehydrate(queryClient);
+
   return (
-    <div className="flex flex-col flex-1 h-full ">
-      <div className="flex justify-between">
-        <div className="flex flex-col">
-          <h1 className="text-3xl font-bold">workflows</h1>
-          <p className="text-muted-foreground">Manage your workflows</p>
+    <HydrationBoundary state={dehydrateState}>
+      <div className="flex flex-col flex-1 h-full ">
+        <div className="flex justify-between">
+          <div className="flex flex-col">
+            <h1 className="text-3xl font-bold">workflows</h1>
+            <p className="text-muted-foreground">Manage your workflows</p>
+          </div>
+          <CreateWorkflowDialog />
         </div>
-        <CreateWorkflowDialog />
+        <div className="h-full py-6">
+          <Suspense fallback={<UserWorkflowsSkeleton />}>
+            <UserWorkflows />
+          </Suspense>
+        </div>
       </div>
-      <div className="h-full py-6">
-        <Suspense fallback={<UserWorkflowsSkeleton />}>
-          <UserWorkflows />
-        </Suspense>
-      </div>
-    </div>
+    </HydrationBoundary>
   );
 }
 
