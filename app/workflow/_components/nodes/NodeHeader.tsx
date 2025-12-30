@@ -16,7 +16,6 @@ function NodeHeader({
   nodeId: string;
 }) {
   const { deleteElements, getNode, setNodes } = useReactFlow();
-  // console.log(reactFlow, "REACT_FLOW");
   const task = TaskRegistry[taskType];
 
   const deleteNode = useCallback(async () => {

@@ -65,7 +65,6 @@ export function FlowToExecutionPlan(nodes: AppNode[], edges: Edge[]) {
         const incomers = getIncomers(currentNode, nodes, edges);
         if (incomers.every((incomer) => planned.has(incomer.id))) {
           // If all Incomers are already planned this means that this step is invalid
-          // console.log("INVALID_INPUTS", currentNode.id, invalidInputs);
           inputsWithErrors.push({
             nodeId: currentNode.id,
             inputs: invalidInputs as any[],
