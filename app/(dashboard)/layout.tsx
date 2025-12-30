@@ -22,7 +22,7 @@ function layout({ children }: { children: React.ReactNode }) {
 
         <Separator />
         <div className="overflow-auto h-full">
-          <div className="flex-1 container px-4 py-2 text-accent-foreground h-full">
+          <div className="flex-1 container max-w-full px-4 py-2 text-accent-foreground h-full">
             {children}
           </div>
         </div>

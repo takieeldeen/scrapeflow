@@ -8,6 +8,7 @@ import {
   ExecutionPhaseStatus,
   ExecutionPhaseTrigger,
   ExecutionStatus,
+  WorkflowStatus,
 } from "@/types/workflows";
 import { auth } from "@clerk/nextjs/server";
 
@@ -24,6 +25,9 @@ export async function RunWorkflow({
     where: { userId, id: workflowId },
   });
   if (!workflow) throw new Error("Workflow Not Found");
+  if (workflow.status === WorkflowStatus.PUBLISHED) {
+    flowDefinition = workflow.definition;
+  }
   if (!flowDefinition) throw new Error("Flow Definition is not defined");
 
   const flow = JSON.parse(flowDefinition);
@@ -32,6 +36,7 @@ export async function RunWorkflow({
   if (!result.executionPlan)
     throw new Error("Failed to generate execution plan");
   const executionPlan = result.executionPlan;
+
   const execution = await prisma.workflowExecution.create({
     data: {
       userId,

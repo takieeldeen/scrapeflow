@@ -27,12 +27,12 @@ async function WorkflowsPage() {
       <div className="flex flex-col flex-1 h-full ">
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <h1 className="text-3xl font-bold">workflows</h1>
+            <h1 className="text-3xl font-bold">Workflows</h1>
             <p className="text-muted-foreground">Manage your workflows</p>
           </div>
           <CreateWorkflowDialog />
         </div>
-        <div className="h-full py-6">
+        <div className="h-full py-6 ">
           <Suspense fallback={<UserWorkflowsSkeleton />}>
             <UserWorkflows />
           </Suspense>
@@ -68,7 +68,7 @@ async function UserWorkflows() {
     );
   if (workflows.length === 0)
     return (
-      <div className="flex flex-col gap-4 h-full items-center justify-center">
+      <div className="flex flex-col gap-4 h-full items-center justify-center ">
         <div className="rounded-full bg-accent w-20 h-20 flex items-center justify-center">
           <InboxIcon size={40} className="stroke-primary" />
         </div>
