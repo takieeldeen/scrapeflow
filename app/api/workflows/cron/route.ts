@@ -1,3 +1,4 @@
+import { getAppUrl } from "@/lib/helper/appUrl";
 import { prisma } from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflows";
 
@@ -17,4 +18,21 @@ export async function GET(req: Request) {
   }
 
   return new Response(null, { status: 200 });
+}
+
+function triggerWorkflow(workflowId: string) {
+  const triggerApiUrl = getAppUrl(
+    `api/workflows/execute?workflowId=${workflowId}`
+  );
+  fetch(triggerApiUrl, {
+    headers: {
+      Authorization: `Bearer ${process.env.API_SECERT}`,
+    },
+    cache: "no-store",
+    signal: AbortSignal.timeout(10000),
+  }).catch((err) =>
+    console.error(
+      `Error triggering workflow with id ${workflowId} ${err.message}`
+    )
+  );
 }
