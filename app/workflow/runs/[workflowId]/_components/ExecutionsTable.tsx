@@ -14,6 +14,9 @@ import { ExecutionStatus } from "@/types/workflows";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import ExecutionStatusIndicator from "./ExecutionStatusIndicator";
+import { CoinsIcon } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
 
 type InitialDataType = Awaited<ReturnType<typeof GetWorkflowExecutions>>;
 
@@ -24,6 +27,7 @@ function ExecutionsTable({
   workflowId: string;
   initialData: InitialDataType;
 }) {
+  const router = useRouter();
   const query = useQuery({
     queryKey: ["executions", workflowId],
     queryFn: () => GetWorkflowExecutions(workflowId),
@@ -46,12 +50,21 @@ function ExecutionsTable({
         </TableHeader>
         <TableBody className="gap-2 h-full overflow-auto">
           {query?.data?.map((execution) => {
+            const formattedStartedAt =
+              execution.startedAt &&
+              formatDistanceToNow(execution.startedAt, { addSuffix: true });
             const duration = DatesToDurationString(
               execution.completedAt,
               execution.startedAt
             );
             return (
-              <TableRow key={execution?.id}>
+              <TableRow
+                key={execution?.id}
+                className="cursor-pointer"
+                onClick={() => {
+                  router.push(`/workflow/runs/${workflowId}/${execution.id}`);
+                }}
+              >
                 <TableCell>
                   <div className="flex flex-col">
                     <span className="font-semibold">{execution.id}</span>
@@ -76,8 +89,22 @@ function ExecutionsTable({
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{execution.creditsConsumed}</TableCell>
-                <TableCell>{execution.startedAt?.toISOString()}</TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <div className="flex gap-2 items-center">
+                      <CoinsIcon size={16} />
+                      <span className="font-semibold capitalize">
+                        {execution.creditsConsumed}
+                      </span>
+                    </div>
+                    <div className="text-muted-foreground text-xs mx-5">
+                      Credits
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="text-right text-muted-foreground">
+                  {formattedStartedAt}
+                </TableCell>
               </TableRow>
             );
           })}

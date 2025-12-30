@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import Topbar from "../../_components/topbar/Topbar";
 import { GetWorkflowExecutions } from "@/actions/workflows/getWorkflowExecutions";
 import { InboxIcon, Loader2Icon } from "lucide-react";
-import { waitFor } from "@/lib/helper/wait-for";
 import ExecutionsTable from "./_components/ExecutionsTable";
 import {
   dehydrate,
@@ -73,7 +72,9 @@ async function ExecutionsTableWrapper({ workflowId }: { workflowId: string }) {
     );
   return (
     <HydrationBoundary state={dehydrateState}>
-      <ExecutionsTable workflowId={workflowId} initialData={executions} />
+      <div className="container mx-auto  py-6 w-full">
+        <ExecutionsTable workflowId={workflowId} initialData={executions} />
+      </div>
     </HydrationBoundary>
   );
 }

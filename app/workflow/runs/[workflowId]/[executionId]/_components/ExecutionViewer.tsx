@@ -98,7 +98,12 @@ function ExecutionViewer({
           <ExecutionLabel
             icon={CircleDashedIcon}
             label="Status"
-            value={query?.data?.status}
+            value={
+              <div className="font-semibold capitalize flex gap-2 items-center">
+                <PhaseStatusBadge status={query.data.status} />
+                <span>{query?.data?.status}</span>
+              </div>
+            }
           />
           <ExecutionLabel
             icon={CalendarIcon}
