@@ -16,3 +16,18 @@ function ExecutionStatusIndicator({ status }: { status: ExecutionStatus }) {
 }
 
 export default ExecutionStatusIndicator;
+
+const labelColors: Record<ExecutionStatus, string> = {
+  PENDING: "text-slate-400",
+  RUNNING: "text-yellow-400",
+  FAILED: "text-red-400",
+  COMPLETED: "text-emerald-600",
+};
+
+export function ExecutionStatusLabel({ status }: { status: ExecutionStatus }) {
+  return (
+    <span className={cn("lowercase font-semibold", labelColors[status])}>
+      {status}
+    </span>
+  );
+}
