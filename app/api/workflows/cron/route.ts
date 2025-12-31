@@ -12,12 +12,11 @@ export async function GET(req: Request) {
       nextRunAt: { lte: now },
     },
   });
-  console.log("@@WORKFLOW TO RUN", workflows.length);
   for (const workflow of workflows) {
     triggerWorkflow(workflow.id);
   }
 
-  return new Response(null, { status: 200 });
+  return Response.json({ workflowsToRun: workflows.length }, { status: 200 });
 }
 
 function triggerWorkflow(workflowId: string) {
@@ -26,10 +25,10 @@ function triggerWorkflow(workflowId: string) {
   );
   fetch(triggerApiUrl, {
     headers: {
-      Authorization: `Bearer ${process.env.API_SECERT}`,
+      Authorization: `Bearer ${process.env.API_SECRET}`,
     },
     cache: "no-store",
-    signal: AbortSignal.timeout(10000),
+    // signal: AbortSignal.timeout(10000),
   }).catch((err) =>
     console.error(
       `Error triggering workflow with id ${workflowId} ${err.message}`
