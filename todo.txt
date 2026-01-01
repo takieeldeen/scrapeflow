@@ -5,3 +5,9 @@
 # Know more about what is cRon and cRonstrue
 
 # Search on scheduling runs whether on ubuntu or google cloud
+
+# Find Some alternatives to webhook (Emails, Whatsapp, "Telegram")
+
+# Make sure when deleting a credential to tell the user that credential is being used in multiple workflows
+
+# When Opening the workflow run details make the credentials textfield appear as name not as encrypted values

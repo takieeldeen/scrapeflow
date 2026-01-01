@@ -6,7 +6,6 @@ import React from "react";
 import NodeParamField from "./NodeParamField";
 import { ColorForHandle } from "./common";
 import useFlowValidation from "@/components/hooks/useFlowValidation";
-import { FieldError } from "@/components/ui/field";
 
 function NodeInput({ input, nodeId }: { input: TaskParam; nodeId: string }) {
   const edges = useEdges();

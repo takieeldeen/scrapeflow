@@ -7,9 +7,10 @@ function TooltipWrapper({
   side,
 }: {
   children: ReactNode;
-  content: string;
+  content?: string | null;
   side?: "top" | "bottom" | "left" | "right";
 }) {
+  if (!content) return children;
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>

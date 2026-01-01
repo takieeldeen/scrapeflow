@@ -64,7 +64,7 @@ function ExecutionViewer({
   });
 
   const phaseDetails = useQuery({
-    queryKey: ["phaseDetails", selectedPhase],
+    queryKey: ["phaseDetails", selectedPhase, query.data.status],
     enabled: !!selectedPhase,
     queryFn: () => fetchPhaseDetails(selectedPhase!),
   });
