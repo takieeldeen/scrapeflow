@@ -66,6 +66,7 @@ function TaskMenu() {
             Result Delivery
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
+            <TaskMenuBtn taskType={TaskType.SEND_TELEGRAM_MESSAGE} />
             <TaskMenuBtn taskType={TaskType.DELIVER_VIA_WEBHOOK} />
           </AccordionContent>
         </AccordionItem>

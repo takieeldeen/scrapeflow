@@ -12,6 +12,7 @@ import { ExtractDataWithAIExecutor } from "./extractDataWithAIExecutor";
 import { ReadPropertyFromJSONExecutor } from "./ReadPropertyFromJSONExecutor";
 import { AddPropertyToJSONExecutor } from "./AddPropertyFromJSONExecutor";
 import { NavigateToUrlExecutor } from "./NavigateToUrlExecutor";
+import { SendTelegramMessageExecutor } from "./sendTelegramMessageExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (
   environment: ExecutionEnvironment<T>
@@ -31,4 +32,5 @@ export const ExecutorRegistry: RegistryType = {
   READ_PROPERTY_FROM_JSON: ReadPropertyFromJSONExecutor,
   ADD_PROPERTY_TO_JSON: AddPropertyToJSONExecutor,
   NAVIGATE_URL: NavigateToUrlExecutor,
+  SEND_TELEGRAM_MESSAGE: SendTelegramMessageExecutor,
 };

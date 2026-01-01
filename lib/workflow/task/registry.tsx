@@ -11,6 +11,7 @@ import { ExtractDataWithAITask } from "./ExtractDataWithAI";
 import { ReadPropertyFromJSONTask } from "./ReadPropertyFromJSON";
 import { AddPropertyToJSONTask } from "./AddPropertyToJSON";
 import { NavigateToURLTask } from "./NavigateToURL";
+import { SendTelegramMessageTask } from "./sendTelegramMessage";
 
 type Registry = {
   [K in TaskType]: WorkflowTask & { type: K };
@@ -27,4 +28,5 @@ export const TaskRegistry: Registry = {
   READ_PROPERTY_FROM_JSON: ReadPropertyFromJSONTask,
   ADD_PROPERTY_TO_JSON: AddPropertyToJSONTask,
   NAVIGATE_URL: NavigateToURLTask,
+  SEND_TELEGRAM_MESSAGE: SendTelegramMessageTask,
 };
