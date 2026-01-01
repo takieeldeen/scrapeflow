@@ -5,7 +5,10 @@ import { AppNode } from "@/types/appNode";
 import { useCallback } from "react";
 import BrowserInstanceParam from "./param/BrowserInstanceParam";
 import SelectParam from "./param/selectParam";
+<<<<<<< HEAD
 import CredentialParam from "./param/credentialParam";
+=======
+>>>>>>> 9244f1b374c3764fc445c5f7662219e925d47451
 
 function NodeParamField({
   param,
@@ -56,6 +59,7 @@ function NodeParamField({
           updateNodeParamValue={updateNodeParamValue}
         />
       );
+<<<<<<< HEAD
     case TaskParamType.CREDENTIAL:
       return (
         <CredentialParam
@@ -64,6 +68,8 @@ function NodeParamField({
           updateNodeParamValue={updateNodeParamValue}
         />
       );
+=======
+>>>>>>> 9244f1b374c3764fc445c5f7662219e925d47451
     default:
       return (
         <div className="w-full">

@@ -8,10 +8,13 @@ import { FillInputExecutor } from "./FillInputExecutor";
 import { ClickElementExecutor } from "./ClickElementExecutor";
 import { WaitForElementExecutor } from "./waitForElementExecutor";
 import { DeliverViaWebhookExecutor } from "./DeiliverViaWebhookExecutor";
+<<<<<<< HEAD
 import { ExtractDataWithAIExecutor } from "./extractDataWithAIExecutor";
 import { ReadPropertyFromJSONExecutor } from "./ReadPropertyFromJSONExecutor";
 import { AddPropertyToJSONExecutor } from "./AddPropertyFromJSONExecutor";
 import { NavigateToUrlExecutor } from "./NavigateToUrlExecutor";
+=======
+>>>>>>> 9244f1b374c3764fc445c5f7662219e925d47451
 
 type ExecutorFn<T extends WorkflowTask> = (
   environment: ExecutionEnvironment<T>
@@ -27,8 +30,11 @@ export const ExecutorRegistry: RegistryType = {
   CLICK_ELEMENT: ClickElementExecutor,
   WAIT_FOR_ELEMENT: WaitForElementExecutor,
   DELIVER_VIA_WEBHOOK: DeliverViaWebhookExecutor,
+<<<<<<< HEAD
   EXTRACT_DATA_WITH_AI: ExtractDataWithAIExecutor,
   READ_PROPERTY_FROM_JSON: ReadPropertyFromJSONExecutor,
   ADD_PROPERTY_TO_JSON: AddPropertyToJSONExecutor,
   NAVIGATE_URL: NavigateToUrlExecutor,
+=======
+>>>>>>> 9244f1b374c3764fc445c5f7662219e925d47451
 };

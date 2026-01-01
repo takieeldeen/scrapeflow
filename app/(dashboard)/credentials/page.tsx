@@ -2,11 +2,17 @@ import { GetCredentialsForUser } from "@/actions/credentials/getCredentialsForUs
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+<<<<<<< HEAD
 import { LockKeyholeIcon, ShieldIcon, ShieldOffIcon } from "lucide-react";
 import { Suspense } from "react";
 import CreateCredentialsDialog from "./_components/CreateCredentialsDialog";
 import { formatDistanceToNow } from "date-fns";
 import DeleteCredentialsDialog from "./_components/DeleteCredentialsDialog";
+=======
+import { ShieldIcon, ShieldOffIcon } from "lucide-react";
+import { Suspense } from "react";
+import CreateCredentialsDialog from "./_components/CreateCredentialsDialog";
+>>>>>>> 9244f1b374c3764fc445c5f7662219e925d47451
 
 export default function CredentialsPage() {
   return (
@@ -16,7 +22,10 @@ export default function CredentialsPage() {
           <h1 className="text-3xl font-bold">Credentials</h1>
           <p className="text-muted-foreground">Manage your credentials</p>
         </div>
+<<<<<<< HEAD
         <CreateCredentialsDialog triggerText="Create credentials" />
+=======
+>>>>>>> 9244f1b374c3764fc445c5f7662219e925d47451
       </div>
       <div className="h-full py-6 space-y-8">
         <Alert>
@@ -57,6 +66,7 @@ async function UserCredentials() {
     );
   }
   return (
+<<<<<<< HEAD
     <div className="flex gap-2 flex-wrap">
       {credentials.map((credential) => {
         const createdAt = formatDistanceToNow(credential.createdAt, {
@@ -80,6 +90,10 @@ async function UserCredentials() {
           </Card>
         );
       })}
+=======
+    <div>
+      <pre>{JSON.stringify(credentials, null, 4)}</pre>
+>>>>>>> 9244f1b374c3764fc445c5f7662219e925d47451
     </div>
   );
 }
