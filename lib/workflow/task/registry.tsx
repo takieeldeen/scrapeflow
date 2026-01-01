@@ -12,6 +12,7 @@ import { ReadPropertyFromJSONTask } from "./ReadPropertyFromJSON";
 import { AddPropertyToJSONTask } from "./AddPropertyToJSON";
 import { NavigateToURLTask } from "./NavigateToURL";
 import { SendTelegramMessageTask } from "./sendTelegramMessage";
+import { ScrollToElementTask } from "./ScrollToElement";
 
 type Registry = {
   [K in TaskType]: WorkflowTask & { type: K };
@@ -29,4 +30,5 @@ export const TaskRegistry: Registry = {
   ADD_PROPERTY_TO_JSON: AddPropertyToJSONTask,
   NAVIGATE_URL: NavigateToURLTask,
   SEND_TELEGRAM_MESSAGE: SendTelegramMessageTask,
+  SCROLL_TO_ELEMENT: ScrollToElementTask,
 };
